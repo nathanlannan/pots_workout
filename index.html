@@ -312,75 +312,87 @@
   </div>
 
   <script>
-    // --- FORM/EXERCISE DICTIONARY ---
-    // keyed by a substring we can detect in the session title
+    // --- FORM/EXERCISE DICTIONARY (broad, so it always hits) ---
     const HOW_TO = [
       {
-        key: "Rower",
+        key: "strength",
+        title: "Strength day – KB + bodyweight",
+        body: `
+          <p><strong>Goblet squat</strong><br>
+          • Hold KB at chest, elbows down.<br>
+          • Feet shoulder-ish width, toes slightly out.<br>
+          • Sit hips back and down, chest tall.<br>
+          • Only as low as you can control.<br>
+          • Stand up, exhale. Leave 2–3 reps in the tank.</p>
+
+          <p><strong>KB deadlift / hinge</strong><br>
+          • KB between feet.<br>
+          • Soft knees, push hips back, keep back flat.<br>
+          • Grab KB, stand tall by pushing floor away.<br>
+          • Control down. Don’t round.</p>
+
+          <p><strong>1-arm KB row</strong><br>
+          • One hand on bench/chair, back flat.<br>
+          • Pull KB toward hip/ribs, squeeze shoulder blade.<br>
+          • Lower slow.</p>
+
+          <p><strong>Split squat to box (if listed)</strong><br>
+          • Front foot flat, back foot behind.<br>
+          • Drop straight down, light KB or just bodyweight.<br>
+          • Use box/chair for safety.</p>
+
+          <p><strong>Suitcase/farmer carries</strong><br>
+          • Stand tall, KB at side, walk slow.<br>
+          • Ribs down, no leaning.<br>
+          • Stop if HR or symptoms rise.</p>
+
+          <p><strong>POTS safety</strong><br>
+          • Breathe every rep, no breath-holding.<br>
+          • Sit between sets.<br>
+          • If dizzy → stop, sit, feet up.</p>
+        `
+      },
+      {
+        key: "rower",
         title: "Rower – good form",
         body: `
-          <p><strong>Setup:</strong> Strap feet so they don’t slip. Sit tall, slight forward lean from hips, shoulders relaxed.</p>
-          <p><strong>Drive order:</strong> 1) Legs push, 2) then lean back slightly, 3) then arms pull to lower ribs.</p>
-          <p><strong>Recovery:</strong> Arms out first, then hinge forward, then knees bend. Slow return.</p>
-          <p><strong>POTS-friendly:</strong> Start extra easy, avoid breath-holding, stop and stay seated if lightheaded.</p>
+          <p><strong>Setup:</strong> Strap feet, sit tall, slight forward lean from hips.</p>
+          <p><strong>Drive:</strong> Legs push → body leans back a bit → arms pull to lower ribs.</p>
+          <p><strong>Recovery:</strong> Arms out → body forward → knees bend (slow).</p>
+          <p>Keep stroke smooth. Stay seated a bit after if lightheaded.</p>
         `
       },
       {
-        key: "Outdoor walk",
+        key: "walk",
         title: "Outdoor walk – good form",
         body: `
-          <p>Walk on flat ground, arms swinging naturally, eyes forward.</p>
-          <p>Keep stride short and relaxed; don't rush start. If symptoms appear, stop and stand or sit.</p>
-          <p>Compression + pre-hydration helps upright tolerance.</p>
+          <p>Flat route, relaxed stride, arms swing naturally.</p>
+          <p>Look ahead, don’t hunch.</p>
+          <p>Compression + pre-hydration help upright tolerance.</p>
+          <p>Stop and sit if symptoms show up.</p>
         `
       },
       {
-        key: "Strength – KB",
-        title: "KB strength – good form",
-        body: `
-          <p><strong>Goblet squat:</strong> Hold KB at chest, feet shoulder-width, sit hips back/down to comfortable depth, stand tall. Breathe out on the way up.</p>
-          <p><strong>KB deadlift/hinge:</strong> KB between feet, soft knees, hinge hips back keeping back flat, grab KB, stand by pushing floor away.</p>
-          <p><strong>1-arm KB row:</strong> Support one hand on bench/chair, back flat, pull KB toward hip, control down.</p>
-          <p>Always leave 2–3 reps in the tank. If dizzy, sit and continue with seated work.</p>
-        `
-      },
-      {
-        key: "Combo – Walk + Row",
-        title: "Combo – walk then row",
-        body: `
-          <p>Do the walk portion first (flat, easy), then sit and row with the technique above.</p>
-          <p>Sitting for the second half helps symptoms if upright is tiring.</p>
-        `
-      },
-      {
-        key: "Quality",
-        title: "Quality / intervals – how to",
-        body: `
-          <p>Warm up 5 min easy.</p>
-          <p>For each work segment: row with good form, raise effort to target RPE, keep breathing continuous.</p>
-          <p>Between reps: go very easy, stay seated until HR/symptoms settle.</p>
-        `
-      },
-      {
-        key: "Long –",
+        key: "long –",
         title: "Long session – how to",
         body: `
-          <p>Keep most of it at RPE 10–12.</p>
-          <p>Short sip/breath breaks are okay, especially in POTS.</p>
-          <p>Use compression + fluids on these days.</p>
+          <p>Keep most of the time at RPE 10–12.</p>
+          <p>Short sip/breath breaks are totally okay.</p>
+          <p>Mix upright + rower if upright is tiring.</p>
         `
       },
       {
-        key: "Rest / Mobility",
+        key: "rest / mobility",
         title: "Mobility / recovery",
         body: `
-          <p>Gentle neck, shoulders, thoracic rotations, hip flexor stretch, ankle pumps.</p>
-          <p>Finish with 3–5 min diaphragmatic breathing in a comfortable position.</p>
+          <p>Neck circles, shoulder rolls, thoracic rotations, hip flexor stretch.</p>
+          <p>Finish with 3–5 min diaphragmatic breathing.</p>
+          <p>Goal: feel better after than before.</p>
         `
       }
     ];
 
-    // --- PLAN GENERATOR (same structure, just like before) ---
+    // --- PLAN GENERATOR ---
     function generatePlan() {
       const plan = [];
       const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
@@ -630,7 +642,7 @@
 
     fillWeekSelect();
 
-    // load saved Monday
+    // load saved Monday or default to this week's Monday
     const saved = loadStartDate();
     if (saved) {
       startDateInput.value = saved;
@@ -698,27 +710,40 @@
       if (e.target === rpeOverlay) rpeOverlay.classList.remove("active");
     });
 
-    // How-to modal
+    // How-to modal (fixed, broad match)
     function showHowToForCurrent() {
       const week = parseInt(weekSelect.value, 10);
       const dayIdx = parseInt(daySelect.value, 10);
       const sess = PLAN.find(s => s.week === week && s.dayIdx === dayIdx);
       if (!sess) return;
 
-      // find matching how-to
-      const match = HOW_TO.find(h => sess.session_type.includes(h.key));
+      const lowerTitle = (sess.session_type || "").toLowerCase();
+
+      let match = null;
+      if (lowerTitle.includes("strength")) {
+        match = HOW_TO.find(h => h.key === "strength");
+      } else if (lowerTitle.includes("rower")) {
+        match = HOW_TO.find(h => h.key === "rower");
+      } else if (lowerTitle.includes("walk")) {
+        match = HOW_TO.find(h => h.key === "walk");
+      } else if (lowerTitle.includes("long")) {
+        match = HOW_TO.find(h => h.key === "long –");
+      } else if (lowerTitle.includes("mobility") || lowerTitle.includes("rest")) {
+        match = HOW_TO.find(h => h.key === "rest / mobility");
+      }
+
       if (match) {
         howToTitle.textContent = match.title;
         howToBody.innerHTML = match.body;
       } else {
-        // fallback
         howToTitle.textContent = "General form tips";
         howToBody.innerHTML = `
-          <p>Move at the RPE shown for today. Keep breathing, no breath-holding.</p>
-          <p>If upright makes symptoms worse, do the session on the rower, seated.</p>
-          <p>Stop immediately for chest pain, severe dizziness, or vision changes.</p>
+          <p>Keep breathing, no breath-holding.</p>
+          <p>Pick the seated/rower option if upright is rough today.</p>
+          <p>Stop for chest pain, severe dizziness, or vision change.</p>
         `;
       }
+
       howToOverlay.classList.add("active");
     }
 
