@@ -58,9 +58,6 @@
       color: var(--muted);
       margin-bottom: .35rem;
     }
-    input, select, button {
-      font: inherit;
-    }
     input[type="date"], select {
       background: rgba(15, 23, 42, 0.7);
       border: 1px solid rgba(148, 163, 184, 0.25);
@@ -76,6 +73,11 @@
       padding: .4rem .8rem;
       font-weight: 600;
       cursor: pointer;
+    }
+    .secondary-btn {
+      background: rgba(148, 163, 184, 0.1);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: var(--text);
     }
     .today-title {
       font-size: .75rem;
@@ -152,12 +154,54 @@
       margin-bottom: .5rem;
     }
     @media (min-width: 700px) {
-      header { margin-bottom: .25rem; }
       .layout-2 {
         display: grid;
         grid-template-columns: 1.05fr .95fr;
         gap: 1rem;
       }
+    }
+    /* Overlay / modal */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2,6,23,0.6);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 1rem;
+    }
+    .overlay.active {
+      display: flex;
+    }
+    .modal {
+      background: #0f172a;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 1.25rem;
+      max-width: 520px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+    .modal h2 {
+      margin-top: 0;
+      font-size: 1rem;
+    }
+    .rpe-row {
+      display: flex;
+      justify-content: space-between;
+      gap: .75rem;
+      padding: .35rem .5rem;
+      border-bottom: 1px solid rgba(148,163,184,0.1);
+    }
+    .rpe-row:last-child {
+      border-bottom: none;
+    }
+    .rpe-num {
+      font-weight: 600;
+      min-width: 2.5rem;
     }
   </style>
 </head>
@@ -168,7 +212,8 @@
         <h1>POTS Training Planner</h1>
         <div class="small">1-year, RPE-based, rower + outdoor + KB</div>
       </div>
-      <div>
+      <div class="flex-row" style="gap:.4rem;">
+        <button class="secondary-btn" id="rpeBtn">RPE guide</button>
         <button id="todayBtn">Today</button>
       </div>
     </header>
@@ -211,6 +256,7 @@
         <div class="session-line" id="todayDuration"></div>
         <div class="session-line" id="todayRPE"></div>
         <div class="session-line" id="todayNotes"></div>
+        <button class="secondary-btn" id="howToBtn" style="margin-top:.6rem;">How to do this</button>
       </div>
 
       <div class="card">
@@ -224,9 +270,117 @@
     </footer>
   </div>
 
+  <!-- RPE modal -->
+  <div class="overlay" id="rpeOverlay">
+    <div class="modal">
+      <div class="flex-row" style="justify-content:space-between;align-items:center;">
+        <h2>RPE Guide (POTS-friendly)</h2>
+        <button class="secondary-btn" id="closeRpe">Close</button>
+      </div>
+      <p class="small">Use the low end on rough/symptomatic days.</p>
+      <div class="rpe-row">
+        <span class="rpe-num">6–7</span><span>Very easy / mobility / warm-up. You could do this almost indefinitely.</span>
+      </div>
+      <div class="rpe-row">
+        <span class="rpe-num">8–10</span><span>Easy. You can talk in full sentences. Recovery rows/walks.</span>
+      </div>
+      <div class="rpe-row">
+        <span class="rpe-num">11–12</span><span>Comfortable-steady. You’re working but absolutely sustainable.</span>
+      </div>
+      <div class="rpe-row">
+        <span class="rpe-num">13</span><span>Steady-moderate. You can talk, but prefer shorter phrases.</span>
+      </div>
+      <div class="rpe-row">
+        <span class="rpe-num">14–15</span><span>Strong/tempo. Focused, breathing harder, you don’t want to do this too long.</span>
+      </div>
+      <div class="rpe-row">
+        <span class="rpe-num">16</span><span>Hard interval. Short bouts only, follow with easy.</span>
+      </div>
+      <p class="small" style="margin-top:.6rem;">If symptoms jump (dizziness, HR spikes, chest discomfort), drop back to RPE 8–10 or stop.</p>
+    </div>
+  </div>
+
+  <!-- How-to modal -->
+  <div class="overlay" id="howToOverlay">
+    <div class="modal">
+      <div class="flex-row" style="justify-content:space-between;align-items:center;">
+        <h2 id="howToTitle">How to do this</h2>
+        <button class="secondary-btn" id="closeHowTo">Close</button>
+      </div>
+      <div id="howToBody" class="small"></div>
+    </div>
+  </div>
+
   <script>
-    // --- plan generator (JS port of the structure we discussed) ---
-    // returns array of 52 * 7 = 364 sessions
+    // --- FORM/EXERCISE DICTIONARY ---
+    // keyed by a substring we can detect in the session title
+    const HOW_TO = [
+      {
+        key: "Rower",
+        title: "Rower – good form",
+        body: `
+          <p><strong>Setup:</strong> Strap feet so they don’t slip. Sit tall, slight forward lean from hips, shoulders relaxed.</p>
+          <p><strong>Drive order:</strong> 1) Legs push, 2) then lean back slightly, 3) then arms pull to lower ribs.</p>
+          <p><strong>Recovery:</strong> Arms out first, then hinge forward, then knees bend. Slow return.</p>
+          <p><strong>POTS-friendly:</strong> Start extra easy, avoid breath-holding, stop and stay seated if lightheaded.</p>
+        `
+      },
+      {
+        key: "Outdoor walk",
+        title: "Outdoor walk – good form",
+        body: `
+          <p>Walk on flat ground, arms swinging naturally, eyes forward.</p>
+          <p>Keep stride short and relaxed; don't rush start. If symptoms appear, stop and stand or sit.</p>
+          <p>Compression + pre-hydration helps upright tolerance.</p>
+        `
+      },
+      {
+        key: "Strength – KB",
+        title: "KB strength – good form",
+        body: `
+          <p><strong>Goblet squat:</strong> Hold KB at chest, feet shoulder-width, sit hips back/down to comfortable depth, stand tall. Breathe out on the way up.</p>
+          <p><strong>KB deadlift/hinge:</strong> KB between feet, soft knees, hinge hips back keeping back flat, grab KB, stand by pushing floor away.</p>
+          <p><strong>1-arm KB row:</strong> Support one hand on bench/chair, back flat, pull KB toward hip, control down.</p>
+          <p>Always leave 2–3 reps in the tank. If dizzy, sit and continue with seated work.</p>
+        `
+      },
+      {
+        key: "Combo – Walk + Row",
+        title: "Combo – walk then row",
+        body: `
+          <p>Do the walk portion first (flat, easy), then sit and row with the technique above.</p>
+          <p>Sitting for the second half helps symptoms if upright is tiring.</p>
+        `
+      },
+      {
+        key: "Quality",
+        title: "Quality / intervals – how to",
+        body: `
+          <p>Warm up 5 min easy.</p>
+          <p>For each work segment: row with good form, raise effort to target RPE, keep breathing continuous.</p>
+          <p>Between reps: go very easy, stay seated until HR/symptoms settle.</p>
+        `
+      },
+      {
+        key: "Long –",
+        title: "Long session – how to",
+        body: `
+          <p>Keep most of it at RPE 10–12.</p>
+          <p>Short sip/breath breaks are okay, especially in POTS.</p>
+          <p>Use compression + fluids on these days.</p>
+        `
+      },
+      {
+        key: "Rest / Mobility",
+        title: "Mobility / recovery",
+        body: `
+          <p>Gentle neck, shoulders, thoracic rotations, hip flexor stretch, ankle pumps.</p>
+          <p>Finish with 3–5 min diaphragmatic breathing in a comfortable position.</p>
+        `
+      }
+    ];
+
+    // --- PLAN GENERATOR (same structure, just like before) ---
     function generatePlan() {
       const plan = [];
       const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
@@ -312,7 +466,7 @@
           const base = 40 + (w - 17);
           const long = 55 + (w - 17) * 2;
 
-          Mon = make(w,0,"Upright – Outdoor walk (steady)","Flat walk; add 2–3×2 min brisk @ RPE 13 mid-session if ok.", base, "10–13","");
+          Mon = make(w,0,"Upright – Outdoor walk (steady)","Flat walk; add 2–3×2 min brisk @ RPE 13 if ok.", base, "10–13","");
           Tue = make(w,1,"Strength – KB circuit","3 rounds @ RPE 7: goblet squat, KB deadlift, 1-arm row, split squat, carry.", 30, "7","");
           Wed = make(w,2,"Aerobic – Rower (easy)","Continuous easy row.", base, "10–12","");
           let thudetails, thurpe;
@@ -340,9 +494,8 @@
           Sat = make(w,5,"Long – choice","Row, walk, or mix.", Math.min(90,long), "11–13","");
           Sun = make(w,6,"Rest / Mobility","Mobility + breathing.", 15, "6–7","");
 
-        } else { // Maintain
+        } else {
           const base = 50;
-          const long = 75;
 
           Mon = make(w,0,"Upright – walk/jog-walk","Walk steady; on good days 4–6×1 min brisk/jog @ RPE 14.", base, "10–14","Jog only if fully stable.");
           Tue = make(w,1,"Strength – KB circuit","3–4 rounds @ RPE 7–8: goblet squat, deadlift, row, split squat, carry.", 35, "7–8","");
@@ -371,7 +524,7 @@
 
     const PLAN = generatePlan();
 
-    // --- persistence helpers ---
+    // --- persistence ---
     function saveStartDate(dateStr) {
       localStorage.setItem("potsStartMonday", dateStr);
     }
@@ -387,7 +540,6 @@
       return Math.floor(diff / (1000*60*60*24));
     }
 
-    // figure out which session is "today" based on chosen Monday
     function getSessionForDate(startMondayStr, dateObj) {
       const start = new Date(startMondayStr);
       const diffDays = daysBetween(start, dateObj);
@@ -395,16 +547,23 @@
       const week = Math.floor(diffDays / 7) + 1;
       const dayIdx = diffDays % 7;
       if (week < 1 || week > 52) return { outOfRange: true, week, dayIdx };
-      const sess = PLAN.find(s => s.week === week && s.dayIdx === dayIdx);
-      return sess || null;
+      return PLAN.find(s => s.week === week && s.dayIdx === dayIdx);
     }
 
-    // --- UI wiring ---
+    // --- UI refs ---
     const startDateInput = document.getElementById("startDate");
     const weekSelect = document.getElementById("weekSelect");
     const daySelect = document.getElementById("daySelect");
     const todayBtn = document.getElementById("todayBtn");
     const weekGrid = document.getElementById("weekGrid");
+    const howToBtn = document.getElementById("howToBtn");
+    const rpeBtn = document.getElementById("rpeBtn");
+    const rpeOverlay = document.getElementById("rpeOverlay");
+    const closeRpe = document.getElementById("closeRpe");
+    const howToOverlay = document.getElementById("howToOverlay");
+    const closeHowTo = document.getElementById("closeHowTo");
+    const howToTitle = document.getElementById("howToTitle");
+    const howToBody = document.getElementById("howToBody");
 
     function fillWeekSelect() {
       weekSelect.innerHTML = "";
@@ -469,17 +628,16 @@
       });
     }
 
-    // initial setup
     fillWeekSelect();
 
-    // load saved start date or default to this week's Monday
+    // load saved Monday
     const saved = loadStartDate();
     if (saved) {
       startDateInput.value = saved;
     } else {
       const now = new Date();
-      const day = now.getDay(); // 0 Sun .. 1 Mon
-      const diffToMonday = (day === 0 ? -6 : 1 - day); // e.g. Wed(3) -> 1-3 = -2
+      const day = now.getDay();
+      const diffToMonday = (day === 0 ? -6 : 1 - day);
       const monday = new Date(now);
       monday.setDate(now.getDate() + diffToMonday);
       const iso = monday.toISOString().slice(0,10);
@@ -529,7 +687,50 @@
       refreshToday();
     });
 
-    // register service worker
+    // RPE modal
+    rpeBtn.addEventListener("click", () => {
+      rpeOverlay.classList.add("active");
+    });
+    closeRpe.addEventListener("click", () => {
+      rpeOverlay.classList.remove("active");
+    });
+    rpeOverlay.addEventListener("click", (e) => {
+      if (e.target === rpeOverlay) rpeOverlay.classList.remove("active");
+    });
+
+    // How-to modal
+    function showHowToForCurrent() {
+      const week = parseInt(weekSelect.value, 10);
+      const dayIdx = parseInt(daySelect.value, 10);
+      const sess = PLAN.find(s => s.week === week && s.dayIdx === dayIdx);
+      if (!sess) return;
+
+      // find matching how-to
+      const match = HOW_TO.find(h => sess.session_type.includes(h.key));
+      if (match) {
+        howToTitle.textContent = match.title;
+        howToBody.innerHTML = match.body;
+      } else {
+        // fallback
+        howToTitle.textContent = "General form tips";
+        howToBody.innerHTML = `
+          <p>Move at the RPE shown for today. Keep breathing, no breath-holding.</p>
+          <p>If upright makes symptoms worse, do the session on the rower, seated.</p>
+          <p>Stop immediately for chest pain, severe dizziness, or vision changes.</p>
+        `;
+      }
+      howToOverlay.classList.add("active");
+    }
+
+    howToBtn.addEventListener("click", showHowToForCurrent);
+    closeHowTo.addEventListener("click", () => {
+      howToOverlay.classList.remove("active");
+    });
+    howToOverlay.addEventListener("click", (e) => {
+      if (e.target === howToOverlay) howToOverlay.classList.remove("active");
+    });
+
+    // service worker
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker.register("sw.js").catch(() => {});
