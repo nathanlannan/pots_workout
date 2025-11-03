@@ -2,8 +2,9 @@ const CACHE_NAME = "pots-planner-v1";
 const ASSETS = [
   "./",
   "./index.html",
-  "./manifest.webmanifest"
-  // add "./icon-192.png", "./icon-512.png" if you add them
+  "./manifest.webmanifest",
+  "./icon-192.png",
+  "./icon-512.png"
 ];
 
 self.addEventListener("install", (event) => {
