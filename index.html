@@ -210,7 +210,7 @@
     <header>
       <div>
         <h1>POTS Training Planner</h1>
-        <div class="small">1-year, RPE-based, rower + outdoor + KB</div>
+        <div class="small">Rowing-first, 6 months no strength, interval start</div>
       </div>
       <div class="flex-row" style="gap:.4rem;">
         <button class="secondary-btn" id="rpeBtn">RPE guide</button>
@@ -242,7 +242,7 @@
         </div>
       </div>
       <div class="small" style="margin-top:.4rem;">
-        Tip: set this once and I'll remember it on this device.
+        Tip: change this if you want to start on a different Monday.
       </div>
     </div>
 
@@ -277,26 +277,26 @@
         <h2>RPE Guide (POTS-friendly)</h2>
         <button class="secondary-btn" id="closeRpe">Close</button>
       </div>
-      <p class="small">Use the low end on rough/symptomatic days.</p>
+      <p class="small">Use the low end on bad days.</p>
       <div class="rpe-row">
-        <span class="rpe-num">6–7</span><span>Very easy / mobility / warm-up. You could do this almost indefinitely.</span>
+        <span class="rpe-num">6–7</span><span>Very easy / mobility / these 2-min rows. You could recover fast.</span>
       </div>
       <div class="rpe-row">
-        <span class="rpe-num">8–10</span><span>Easy. You can talk in full sentences. Recovery rows/walks.</span>
+        <span class="rpe-num">8–10</span><span>Easy, conversational. Most early rows should feel like this.</span>
       </div>
       <div class="rpe-row">
-        <span class="rpe-num">11–12</span><span>Comfortable-steady. You’re working but absolutely sustainable.</span>
+        <span class="rpe-num">11–12</span><span>Comfortable-steady. Use later when you can row longer.</span>
       </div>
       <div class="rpe-row">
-        <span class="rpe-num">13</span><span>Steady-moderate. You can talk, but prefer shorter phrases.</span>
+        <span class="rpe-num">13</span><span>Steady-moderate. Talking is shorter.</span>
       </div>
       <div class="rpe-row">
-        <span class="rpe-num">14–15</span><span>Strong/tempo. Focused, breathing harder, you don’t want to do this too long.</span>
+        <span class="rpe-num">14–15</span><span>Strong/tempo. Save for later phases.</span>
       </div>
       <div class="rpe-row">
-        <span class="rpe-num">16</span><span>Hard interval. Short bouts only, follow with easy.</span>
+        <span class="rpe-num">16</span><span>Hard interval. Only in later, stable weeks.</span>
       </div>
-      <p class="small" style="margin-top:.6rem;">If symptoms jump (dizziness, HR spikes, chest discomfort), drop back to RPE 8–10 or stop.</p>
+      <p class="small" style="margin-top:.6rem;">If dizziness, palpitations, or chest pain → stop and sit.</p>
     </div>
   </div>
 
@@ -312,97 +312,49 @@
   </div>
 
   <script>
-    // --- FORM/EXERCISE DICTIONARY (broad, so it always hits) ---
+    // ----- HOW-TO DICTIONARY -----
     const HOW_TO = [
       {
-        key: "strength",
-        title: "Strength day – KB + bodyweight",
+        key: "row",
+        title: "Seated row intervals – how to",
         body: `
-          <p><strong>Goblet squat</strong><br>
-          • Hold KB at chest, elbows down.<br>
-          • Feet shoulder-ish width, toes slightly out.<br>
-          • Sit hips back and down, chest tall.<br>
-          • Only as low as you can control.<br>
-          • Stand up, exhale. Leave 2–3 reps in the tank.</p>
-
-          <p><strong>KB deadlift / hinge</strong><br>
-          • KB between feet.<br>
-          • Soft knees, push hips back, keep back flat.<br>
-          • Grab KB, stand tall by pushing floor away.<br>
-          • Control down. Don’t round.</p>
-
-          <p><strong>1-arm KB row</strong><br>
-          • One hand on bench/chair, back flat.<br>
-          • Pull KB toward hip/ribs, squeeze shoulder blade.<br>
-          • Lower slow.</p>
-
-          <p><strong>Split squat to box (if listed)</strong><br>
-          • Front foot flat, back foot behind.<br>
-          • Drop straight down, light KB or just bodyweight.<br>
-          • Use box/chair for safety.</p>
-
-          <p><strong>Suitcase/farmer carries</strong><br>
-          • Stand tall, KB at side, walk slow.<br>
-          • Ribs down, no leaning.<br>
-          • Stop if HR or symptoms rise.</p>
-
-          <p><strong>POTS safety</strong><br>
-          • Breathe every rep, no breath-holding.<br>
-          • Sit between sets.<br>
-          • If dizzy → stop, sit, feet up.</p>
+          <p><strong>Setup:</strong> Strap feet so they don’t slip. Sit tall, slight forward lean from the hips.</p>
+          <p><strong>Drive:</strong> Legs push → small lean back → arms pull to lower ribs.</p>
+          <p><strong>Recovery:</strong> Arms out → lean forward → knees bend. Make recovery slower than the drive.</p>
+          <p><strong>Intervals:</strong> After each 2–3 min bout, stay seated and breathe until symptoms settle, even if that takes longer than planned.</p>
         `
       },
       {
-        key: "rower",
-        title: "Rower – good form",
-        body: `
-          <p><strong>Setup:</strong> Strap feet, sit tall, slight forward lean from hips.</p>
-          <p><strong>Drive:</strong> Legs push → body leans back a bit → arms pull to lower ribs.</p>
-          <p><strong>Recovery:</strong> Arms out → body forward → knees bend (slow).</p>
-          <p>Keep stroke smooth. Stay seated a bit after if lightheaded.</p>
-        `
-      },
-      {
-        key: "walk",
-        title: "Outdoor walk – good form",
-        body: `
-          <p>Flat route, relaxed stride, arms swing naturally.</p>
-          <p>Look ahead, don’t hunch.</p>
-          <p>Compression + pre-hydration help upright tolerance.</p>
-          <p>Stop and sit if symptoms show up.</p>
-        `
-      },
-      {
-        key: "long –",
-        title: "Long session – how to",
-        body: `
-          <p>Keep most of the time at RPE 10–12.</p>
-          <p>Short sip/breath breaks are totally okay.</p>
-          <p>Mix upright + rower if upright is tiring.</p>
-        `
-      },
-      {
-        key: "rest / mobility",
+        key: "mobility",
         title: "Mobility / recovery",
         body: `
-          <p>Neck circles, shoulder rolls, thoracic rotations, hip flexor stretch.</p>
-          <p>Finish with 3–5 min diaphragmatic breathing.</p>
-          <p>Goal: feel better after than before.</p>
+          <p>5–10 min of gentle neck, shoulders, thoracic rotations, hip flexor stretch.</p>
+          <p>Finish with 3–5 min diaphragmatic breathing (one hand on belly, slow inhale, slow exhale).</p>
+        `
+      },
+      {
+        key: "strength",
+        title: "Light KB / reintro strength",
+        body: `
+          <p>This starts around Week 25.</p>
+          <p><strong>Goblet squat:</strong> KB at chest, sit to a box/chair, stand tall, breathe out on the way up, stop 2–3 reps before fatigue.</p>
+          <p><strong>KB deadlift:</strong> KB between feet, hinge at hips, flat back, stand up.</p>
+          <p>Rest seated between sets.</p>
         `
       }
     ];
 
-    // --- PLAN GENERATOR ---
+    // ----- PLAN GENERATOR (early months = low-volume rowing only) -----
     function generatePlan() {
       const plan = [];
       const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 
-      function make(week, dayIdx, session_type, details, duration, rpe, notes="") {
+      function make(week, dayIdx, type, details, duration, rpe, notes="") {
         return {
           week,
           dayIdx,
           dayName: days[dayIdx],
-          session_type,
+          session_type: type,
           details,
           duration,
           rpe,
@@ -410,133 +362,157 @@
         };
       }
 
-      function deloadDuration(dur) {
-        if (typeof dur === "string") {
-          const parts = dur.replace("–","-").split("-");
-          if (parts.length === 2) {
-            const a = Math.max(10, Math.round(parseInt(parts[0],10) * 0.75));
-            const b = Math.max(10, Math.round(parseInt(parts[1],10) * 0.75));
-            return a + "-" + b;
-          }
-          return dur;
-        } else {
-          return Math.max(10, Math.round(dur * 0.75));
-        }
-      }
-
       for (let w = 1; w <= 52; w++) {
-        let phase = "";
-        if (w <= 8) phase = "Foundation";
-        else if (w <= 16) phase = "Transition";
-        else if (w <= 24) phase = "Build";
-        else if (w <= 36) phase = "Consolidate";
-        else phase = "Maintain";
+        let sessions = [];
 
-        const isDeload = (w >= 12 && (w - 12) % 4 === 0);
-
-        let Mon, Tue, Wed, Thu, Fri, Sat, Sun;
-
-        if (phase === "Foundation") {
-          const base = 25 + (w - 1) * 2;
-          const long = 30 + (w - 1) * 3;
-
-          Mon = make(w,0,"Aerobic – Rower (easy)","Continuous easy row.", base, "9–11","5 min warm-up & cool-down.");
-          Tue = make(w,1,"Strength – KB + bodyweight","Goblet squat, KB deadlift, 1-arm row, dead bug, glute bridge. 2–3 sets, stop well before failure.", 20 + (w>4 ? 5:0), "6–7","");
-          Wed = make(w,2,"Aerobic – Rower (easy)","Continuous easy row, relaxed stroke.", base, "9–11","");
-          let thudetails, thudur, thurpe;
-          if (w <= 4) {
-            thudetails = "4×2 min @ RPE 12, 2 min very easy between; rest easy.";
-            thudur = base;
-            thurpe = "10–12";
-          } else {
-            thudetails = "4×3 min @ RPE 12–13, 3 min very easy; rest easy.";
-            thudur = base + 5;
-            thurpe = "11–13";
-          }
-          Thu = make(w,3,"Aerobic – Rower (steady pieces)", thudetails, thudur, thurpe, "Cooldown seated.");
-          if (w >= 6) {
-            Fri = make(w,4,"Upright – Outdoor walk (very easy)","Flat route, turn back early if symptoms.", 10 + (w-6)*2, "8–10","Swap to 15–20 min rower if upright is bad.");
-          } else {
-            Fri = make(w,4,"Aerobic – Rower (recovery)","Very easy rowing.", Math.max(15, base-5), "8–10","");
-          }
-          Sat = make(w,5,"Aerobic – Rower (long)","Continuous easy; short pauses ok.", long, "10–12","Compression & pre-hydration help.");
-          Sun = make(w,6,"Rest / Mobility","Light mobility + breathing.", 15, "6–7","Rest fully if flared.");
-
-        } else if (phase === "Transition") {
-          const base = 35 + (w - 9) * 2;
-          const long = 45 + (w - 9) * 3;
-
-          Mon = make(w,0,"Aerobic – Rower (easy)","Continuous easy row.", base, "10–12","");
-          Tue = make(w,1,"Strength – KB + bodyweight","3 sets: goblet squat, KB deadlift, 1-arm row, tall-kneeling press (optional), dead bug, bridge.", 30, "6–7","Skip overhead if symptomatic.");
-          Wed = make(w,2,"Combo – Walk + Row","Walk 10–20 min easy, then 15–25 min easy row.", "30–40", "9–11","Row finish helps if upright is meh.");
-          Thu = make(w,3,"Aerobic – Rower (steady/tempo)","5×3 min @ RPE 13–14 with 3 min very easy; finish easy.", base, "11–14","");
-          Fri = make(w,4,"Upright – Outdoor walk","Continuous flat walk.", 15 + (w-9)*3, "10–12","Compression useful.");
-          Sat = make(w,5,"Aerobic – Rower (long)","Build steady continuous row.", long, "11–13","");
-          Sun = make(w,6,"Rest / Mobility","Gentle mobility + breathwork.", 15, "6–7","");
-
-        } else if (phase === "Build") {
-          const base = 40 + (w - 17);
-          const long = 55 + (w - 17) * 2;
-
-          Mon = make(w,0,"Upright – Outdoor walk (steady)","Flat walk; add 2–3×2 min brisk @ RPE 13 if ok.", base, "10–13","");
-          Tue = make(w,1,"Strength – KB circuit","3 rounds @ RPE 7: goblet squat, KB deadlift, 1-arm row, split squat, carry.", 30, "7","");
-          Wed = make(w,2,"Aerobic – Rower (easy)","Continuous easy row.", base, "10–12","");
-          let thudetails, thurpe;
-          if (w % 2 === 1) {
-            thudetails = "Steady block: 15–20 min @ RPE 15 inside 45–60 min.";
-            thurpe = "12–15";
-          } else {
-            thudetails = "6×3 min @ RPE 15 with 3 min very easy; total 45–60 min.";
-            thurpe = "10–16";
-          }
-          Thu = make(w,3,"Quality – Rower or Walk", thudetails, "45–60", thurpe, "Choose row if upright symptoms higher.");
-          Fri = make(w,4,"Recovery – row/walk","Short + very easy.", Math.max(25, base-10), "8–10","Rest if flared.");
-          Sat = make(w,5,"Long – Row or mix","≥15–20 min upright somewhere.", long, "11–13","");
-          Sun = make(w,6,"Rest / Mobility","Mobility + core activation.", 15, "6–7","");
-
-        } else if (phase === "Consolidate") {
-          const base = 45 + (w - 25);
-          const long = 60 + (w - 25) * 2;
-
-          Mon = make(w,0,"Upright – Outdoor walk (steady)","Add 3–4×2–3 min brisk @ RPE 13 if ok.", Math.min(base,55), "10–13","");
-          Tue = make(w,1,"Strength – KB circuit","3–4 rounds @ RPE 7–8: goblet squat, KB deadlift, 1-arm row, hinge/swing technique, carry.", 35, "7–8","Only swing if stable.");
-          Wed = make(w,2,"Aerobic – Rower (easy)","Continuous easy row.", Math.min(50,base), "10–12","");
-          Thu = make(w,3,"Quality – Intervals","6–8×3 min @ RPE 15–16 with 3 min easy; total 50–60 min.", "50–60", "10–16","Pick row vs outdoors.");
-          Fri = make(w,4,"Recovery – very easy","Short, conversational.", 30, "8–10","Optional rest.");
-          Sat = make(w,5,"Long – choice","Row, walk, or mix.", Math.min(90,long), "11–13","");
-          Sun = make(w,6,"Rest / Mobility","Mobility + breathing.", 15, "6–7","");
-
-        } else {
-          const base = 50;
-
-          Mon = make(w,0,"Upright – walk/jog-walk","Walk steady; on good days 4–6×1 min brisk/jog @ RPE 14.", base, "10–14","Jog only if fully stable.");
-          Tue = make(w,1,"Strength – KB circuit","3–4 rounds @ RPE 7–8: goblet squat, deadlift, row, split squat, carry.", 35, "7–8","");
-          Wed = make(w,2,"Aerobic – Rower (easy)","Continuous easy row.", base, "10–12","");
-          Thu = make(w,3,"Quality – choice","Alt steady 20–25 min @ RPE 15 and 6–8×3–4 min @ RPE 15–16.", "50–60", "10–16","");
-          Fri = make(w,4,"Recovery – very easy","Short & easy; can be mobility.", 25, "8–10","");
-          Sat = make(w,5,"Long – choice","70–90 min total. Mix upright + row.", "70–90", "11–13","");
-          Sun = make(w,6,"Rest / Mobility","Full rest or mobility.", 15, "6–7","");
+        // PHASE 1: Weeks 1–4 (very low, interval)
+        if (w === 1) {
+          sessions = [
+            make(w,0,"Row – 3×2 min","3 × 2 min row @ RPE 6–7, 2–3 min seated rest after each.", "≈15–18", "6–7","Stay seated to recover."),
+            make(w,1,"Mobility / breathing","Gentle mobility 5–10 min.", 10, "6–7",""),
+            make(w,2,"Row – repeat","Same as Monday. If easy, you may do a 4th 2-min block.", "≈15–18", "6–7",""),
+            make(w,3,"Rest / easy walk","Off or 5–10 min flat walk.", 10, "6–7","Stop if upright symptoms."),
+            make(w,4,"Row – 3×2 min","3 × 2 min, 2–3 min rest.", "≈15–18", "6–7",""),
+            make(w,5,"Optional short row","2 × 2 min, long rests.", "≈10–12", "6–7","Skip if tired."),
+            make(w,6,"Rest","Full rest.", 0, "6–7","")
+          ];
+        } else if (w === 2) {
+          sessions = [
+            make(w,0,"Row – 4×2 min","4 × 2 min @ RPE 6–7, 2–3 min rest.", "≈18–20", "6–7",""),
+            make(w,1,"Mobility / breathing","Gentle 5–10 min mobility.", 10, "6–7",""),
+            make(w,2,"Row – 3×2 min (lighter)","3 × 2 min, 2–3 min rest.", "≈15–18", "6–7",""),
+            make(w,3,"Rest / easy walk","Off or 5–10 min flat walk.", 10, "6–7",""),
+            make(w,4,"Row – 4×2 min","4 × 2 min, 2–3 min rest.", "≈18–20", "6–7",""),
+            make(w,5,"Optional 2×2 min","Short row.", "≈10–12", "6–7",""),
+            make(w,6,"Rest","", 0, "6–7","")
+          ];
+        } else if (w === 3) {
+          sessions = [
+            make(w,0,"Row – 2×3 min + 2×2 min","2 × 3 min, then 2 × 2 min. All @ RPE 6–7. Rest 2–3 min.", "≈20", "6–7",""),
+            make(w,1,"Mobility","5–10 min gentle.", 10, "6–7",""),
+            make(w,2,"Row – 4×2 min","4 × 2 min, 2–3 min rest.", "≈18–20", "6–7",""),
+            make(w,3,"Rest / easy walk","Off or 5–10 min walk.", 10, "6–7",""),
+            make(w,4,"Row – 4×2 min","Repeat.", "≈18–20", "6–7",""),
+            make(w,5,"Optional 2×2 min","Keep it easy.", "≈10–12", "6–7",""),
+            make(w,6,"Rest","", 0, "6–7","")
+          ];
+        } else if (w === 4) {
+          sessions = [
+            make(w,0,"Row – 3×3 min","3 × 3 min @ RPE 6–7, 2–3 min rest.", "≈20", "6–7",""),
+            make(w,1,"Mobility","", 10, "6–7",""),
+            make(w,2,"Row – 4×2 min","4 × 2 min.", "≈18–20", "6–7",""),
+            make(w,3,"Rest / easy walk","", 10, "6–7",""),
+            make(w,4,"Row – 4×2 min","", "≈18–20", "6–7",""),
+            make(w,5,"Optional 2×2 min","", "≈10–12", "6–7",""),
+            make(w,6,"Rest","", 0, "6–7","")
+          ];
         }
-
-        let sessions = [Mon, Tue, Wed, Thu, Fri, Sat, Sun];
-
-        if (isDeload) {
-          sessions = sessions.map(s => {
-            const c = {...s};
-            c.duration = deloadDuration(c.duration);
-            c.notes = (c.notes ? c.notes + " " : "") + "Deload week: keep RPEs at low end.";
-            return c;
-          });
+        // PHASE 1.5: Weeks 5–8 (still no strength, slightly longer)
+        else if (w === 5) {
+          sessions = [
+            make(w,0,"Row – 3×3 min","3 × 3 min @ RPE 6–7, 2–3 min rest.", "≈20", "6–7",""),
+            make(w,1,"Mobility","", 10, "6–7",""),
+            make(w,2,"Row – 5×2 min","5 × 2 min @ RPE 6–7, 2 min rest.", "≈20", "6–7",""),
+            make(w,3,"Rest / walk","", 10, "6–7",""),
+            make(w,4,"Row – 3×3 min","", "≈20", "6–7",""),
+            make(w,5,"Optional 2×2 min","", "≈10–12", "6–7",""),
+            make(w,6,"Rest","", 0, "6–7","")
+          ];
+        } else if (w === 6) {
+          sessions = [
+            make(w,0,"Row – 4×3 min","4 × 3 min @ RPE 6–7, 2–3 min rest.", "≈25", "6–7",""),
+            make(w,1,"Mobility","", 10, "6–7",""),
+            make(w,2,"Row – 6×2 min","6 × 2 min, 1–2 min rest.", "≈22", "6–7",""),
+            make(w,3,"Rest / walk","10–15 min flat, optional.", 15, "6–7",""),
+            make(w,4,"Row – 10–15 min continuous (broken OK)","Row 3–5 min, pause, repeat to 10–15 min.", "10–15", "6–7","Micro-pauses OK."),
+            make(w,5,"Optional 2×2 min","", "≈10–12", "6–7",""),
+            make(w,6,"Rest","", 0, "6–7","")
+          ];
+        } else if (w === 7) {
+          sessions = [
+            make(w,0,"Row – 2×5 min + 2×2 min","2 × 5 min @ RPE 6–7, then 2 × 2 min. 2–3 min rest.", "≈25", "6–7",""),
+            make(w,1,"Mobility","", 10, "6–7",""),
+            make(w,2,"Row – 5×3 min","5 × 3 min, 2 min rest.", "≈25–28", "6–7",""),
+            make(w,3,"Rest / walk","", 10, "6–7",""),
+            make(w,4,"Row – 15–18 min continuous (broken ok)","", "15–18", "6–7","Pause as needed."),
+            make(w,5,"Optional 2×3 min","", "≈10–12", "6–7",""),
+            make(w,6,"Rest","", 0, "6–7","")
+          ];
+        } else if (w === 8) {
+          sessions = [
+            make(w,0,"Row – 3×3 min (deload)","", "≈18–20", "6–7","Deload week."),
+            make(w,1,"Mobility","", 10, "6–7",""),
+            make(w,2,"Row – 4×2 min","", "≈15–18", "6–7",""),
+            make(w,3,"Rest / walk","", 10, "6–7",""),
+            make(w,4,"Row – 10–12 min easy","", "10–12", "6–7",""),
+            make(w,5,"Optional short row","", "8–10", "6–7",""),
+            make(w,6,"Rest","", 0, "6–7","")
+          ];
+        }
+        // PHASE 2: Weeks 9–12 (more "real" sessions, still rowing only)
+        else if (w >= 9 && w <= 12) {
+          const weekInPhase = w - 8; // 1..4
+          // We'll slightly increase target total time
+          const targetMain = 20 + (weekInPhase - 1) * 3; // 20,23,26,29
+          sessions = [
+            make(w,0,"Row – main day","Warm 3 min, then 2 × 6–8 min @ RPE 7, 2–3 min rest, then 2–3 min cool.", targetMain, "7","Break earlier if symptoms."),
+            make(w,1,"Mobility","", 10, "6–7",""),
+            make(w,2,"Row – interval day","6–8 × 2–3 min @ RPE 6–7, 1–2 min rest.", targetMain - 2, "6–7","Keep rests seated."),
+            make(w,3,"Rest / walk","Short flat walk optional.", 10, "6–7",""),
+            make(w,4,"Row – tolerance day","Try to stay on rower ~20–25 min total, micro-pauses OK.", targetMain, "6–7",""),
+            make(w,5,"Optional very easy row","6–10 min.", 10, "6–7",""),
+            make(w,6,"Rest","", 0, "6–7","")
+          ];
+        }
+        // PHASE 3: Weeks 13–24 (build toward 30–35 min, still no strength)
+        else if (w >= 13 && w <= 24) {
+          const extra = Math.min(12, w - 12); // 1..12
+          const baseMain = 20 + extra;        // grows to ~32
+          sessions = [
+            make(w,0,"Row – continuous-ish","5 min easy → 10–15 min @ RPE 7 → 5 min easy. Micro-pauses ok.", baseMain, "7",""),
+            make(w,1,"Mobility / optional walk","", 10, "6–7",""),
+            make(w,2,"Row – interval support","6 × 3 min @ RPE 7, 1–2 min rest.", baseMain - 2, "7","Sit between."),
+            make(w,3,"Rest","", 0, "6–7",""),
+            make(w,4,"Row – longer day","Build to 30–35 min total with short pauses.", Math.min(35, baseMain + 5), "6–7","Pause whenever needed."),
+            make(w,5,"Optional short row","2–3 × 3 min.", 10, "6–7",""),
+            make(w,6,"Rest","", 0, "6–7","")
+          ];
+        }
+        // PHASE 4: Weeks 25–36 (reintroduce strength 1×, keep 3–4 row days)
+        else if (w >= 25 && w <= 36) {
+          const baseMain = 30; // you've earned 30-min-style days
+          sessions = [
+            make(w,0,"Row – steady","5 min easy → 15–20 min steady @ RPE 7 → 5 min easy.", baseMain, "7",""),
+            make(w,1,"Strength – light KB / bodyweight","Goblet squat to chair, KB deadlift, 1-arm row. 1–2 sets. RPE 6–7.", 15, "6–7","Swap for easy row if bad day."),
+            make(w,2,"Row – interval","6–8 × 3 min @ RPE 7–8, 1–2 min rest.", 28, "7–8",""),
+            make(w,3,"Rest / mobility","", 10, "6–7",""),
+            make(w,4,"Row – longer","30–35 min total, micro-pauses.", 35, "7",""),
+            make(w,5,"Optional easy row","10–15 min.", 15, "6–7",""),
+            make(w,6,"Rest","", 0, "6–7","")
+          ];
+        }
+        // PHASE 5: Weeks 37–52 (maintenance, 4 row / 2 strength / 1 rest)
+        else {
+          sessions = [
+            make(w,0,"Row – steady","5 min easy → 20 min @ RPE 7 → 5 min easy.", 30, "7",""),
+            make(w,1,"Strength – light/moderate","KB goblet squat, deadlift, row, split squat. 2–3 sets, RPE 7.", 20, "7",""),
+            make(w,2,"Row – intervals","6–8 × 3–4 min @ RPE 7–8, 1–2 min rest.", 32, "7–8",""),
+            make(w,3,"Rest / mobility","", 10, "6–7",""),
+            make(w,4,"Row – long / mix","30–40 min total, pauses ok.", 38, "7",""),
+            make(w,5,"Strength – light","Repeat Tue or do bodyweight.", 15, "6–7",""),
+            make(w,6,"Rest","", 0, "6–7","")
+          ];
         }
 
         plan.push(...sessions);
       }
+
       return plan;
     }
 
     const PLAN = generatePlan();
 
-    // --- persistence ---
+    // ----- persistence -----
     function saveStartDate(dateStr) {
       localStorage.setItem("potsStartMonday", dateStr);
     }
@@ -544,7 +520,7 @@
       return localStorage.getItem("potsStartMonday");
     }
 
-    // --- date helpers ---
+    // ----- date helpers -----
     function daysBetween(d1, d2) {
       const one = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate());
       const two = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
@@ -552,17 +528,21 @@
       return Math.floor(diff / (1000*60*60*24));
     }
 
+    // modified: if date is before start, show week 1 Monday
     function getSessionForDate(startMondayStr, dateObj) {
       const start = new Date(startMondayStr);
       const diffDays = daysBetween(start, dateObj);
-      if (diffDays < 0) return null;
+      if (diffDays < 0) {
+        // before the program start → just show Week 1 Monday
+        return PLAN.find(s => s.week === 1 && s.dayIdx === 0);
+      }
       const week = Math.floor(diffDays / 7) + 1;
       const dayIdx = diffDays % 7;
       if (week < 1 || week > 52) return { outOfRange: true, week, dayIdx };
       return PLAN.find(s => s.week === week && s.dayIdx === dayIdx);
     }
 
-    // --- UI refs ---
+    // ----- UI refs -----
     const startDateInput = document.getElementById("startDate");
     const weekSelect = document.getElementById("weekSelect");
     const daySelect = document.getElementById("daySelect");
@@ -642,19 +622,13 @@
 
     fillWeekSelect();
 
-    // load saved Monday or default to this week's Monday
+    // default start date: 2025-11-05 (your date), unless user saved something else
     const saved = loadStartDate();
     if (saved) {
       startDateInput.value = saved;
     } else {
-      const now = new Date();
-      const day = now.getDay();
-      const diffToMonday = (day === 0 ? -6 : 1 - day);
-      const monday = new Date(now);
-      monday.setDate(now.getDate() + diffToMonday);
-      const iso = monday.toISOString().slice(0,10);
-      startDateInput.value = iso;
-      saveStartDate(iso);
+      startDateInput.value = "2025-11-05";
+      saveStartDate("2025-11-05");
     }
 
     function refreshToday() {
@@ -710,40 +684,26 @@
       if (e.target === rpeOverlay) rpeOverlay.classList.remove("active");
     });
 
-    // How-to modal (fixed, broad match)
+    // How-to modal
     function showHowToForCurrent() {
       const week = parseInt(weekSelect.value, 10);
       const dayIdx = parseInt(daySelect.value, 10);
       const sess = PLAN.find(s => s.week === week && s.dayIdx === dayIdx);
       if (!sess) return;
-
-      const lowerTitle = (sess.session_type || "").toLowerCase();
+      const lower = (sess.session_type || "").toLowerCase();
 
       let match = null;
-      if (lowerTitle.includes("strength")) {
+      if (lower.includes("mobility") || lower.includes("rest")) {
+        match = HOW_TO.find(h => h.key === "mobility");
+      } else if (lower.includes("strength")) {
         match = HOW_TO.find(h => h.key === "strength");
-      } else if (lowerTitle.includes("rower")) {
-        match = HOW_TO.find(h => h.key === "rower");
-      } else if (lowerTitle.includes("walk")) {
-        match = HOW_TO.find(h => h.key === "walk");
-      } else if (lowerTitle.includes("long")) {
-        match = HOW_TO.find(h => h.key === "long –");
-      } else if (lowerTitle.includes("mobility") || lowerTitle.includes("rest")) {
-        match = HOW_TO.find(h => h.key === "rest / mobility");
-      }
-
-      if (match) {
-        howToTitle.textContent = match.title;
-        howToBody.innerHTML = match.body;
       } else {
-        howToTitle.textContent = "General form tips";
-        howToBody.innerHTML = `
-          <p>Keep breathing, no breath-holding.</p>
-          <p>Pick the seated/rower option if upright is rough today.</p>
-          <p>Stop for chest pain, severe dizziness, or vision change.</p>
-        `;
+        // default to row guidance
+        match = HOW_TO.find(h => h.key === "row");
       }
 
+      howToTitle.textContent = match.title;
+      howToBody.innerHTML = match.body;
       howToOverlay.classList.add("active");
     }
 
